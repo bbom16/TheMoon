@@ -37,6 +37,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
@@ -71,7 +72,7 @@ import bbfactory.themoon.SampleGattAttributes;
 public class DeviceControlActivity extends Activity {
     private final static String TAG = DeviceControlActivity.class.getSimpleName();
 
-    int year, month, day;
+   int lunage;
     public static final String EXTRAS_DEVICE_NAME = "DEVICE_NAME";
     public static final String EXTRAS_DEVICE_ADDRESS = "DEVICE_ADDRESS";
     // private TextView isSerial;
@@ -339,12 +340,26 @@ public class DeviceControlActivity extends Activity {
                                 Lunage = parser.getText();
                                 inLuna = false;
                                 Log.d("Lunage값", Lunage);
+                                lunage = (int)Float.parseFloat(Lunage);
+                                if(lunage >=0 && lunage < 3 || lunage >= 28) lunage = 14; //달 작을 때는 보름
+                                else if(lunage >=3 && lunage < 6) lunage = 4;
+                                else if(lunage >=6 && lunage < 8) lunage = 7;
+                                else if(lunage == 8) lunage = 8;
+                                else if(lunage >=9 && lunage < 11) lunage = 10;
+                                else if(lunage >=11 && lunage < 14) lunage = 12;
+                                else if(lunage >= 14 && lunage <16) lunage = 14;
+                                else if(lunage >=16 && lunage < 19) lunage = 17;
+                                else if(lunage >=19 && lunage < 22) lunage = 20;
+                                else if(lunage == 22) lunage = 22;
+                                else if(lunage >=23 && lunage < 26) lunage = 24;
+                                else if(lunage >=26 && lunage < 28) lunage = 27;
                             }
                             break;
                         case XmlPullParser.END_TAG:
                             if (parser.getName().equals("item")) {
-                                moonData = String.valueOf(array[0]%100) + String.valueOf(String.format("%02d", array[1])) + String.valueOf(String.format("%02d", array[2])) + "12";
+                                moonData = String.valueOf(array[0]%100) + String.valueOf(String.format("%02d", array[1])) + String.valueOf(String.format("%02d", array[2])) + String.valueOf(lunage);
                                 // data.setText(Lunage);
+
                                 makeChange(moonData);
                             }
 
